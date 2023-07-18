@@ -1,16 +1,23 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
 import { ControllersController } from './controllers/controllers.controller';
 import { ChatService } from './services/chat.service';
-import { MessageService } from './services/message.service';
-import { MediaService } from './services/media.service';
+import { MessageCommandService } from './services/message.service';
 import { FirebaseService } from './services/firebase.service';
-import { GroupParticipantService } from './services/group-participant.service';
+import { MediaService } from './services/media.service';
+import { appConfig } from './configs/app.config';
+import { firebaseConfig } from './configs/firebase.config';
+import { GroupParticipantsCommandService } from './services/group-participant.service';
 
 @Module({
-  imports: [],
-  controllers: [AppController, ControllersController],
-  providers: [AppService, ChatService, MessageService, MediaService, FirebaseService, GroupParticipantService],
+  controllers: [ControllersController],
+  imports: [ConfigModule.forRoot({ load: [appConfig, firebaseConfig] })],
+  providers: [
+    MessageCommandService,
+    GroupParticipantsCommandService,
+    FirebaseService,
+    ChatService,
+    MediaService,
+  ],
 })
 export class AppModule {}
